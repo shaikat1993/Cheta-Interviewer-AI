@@ -16,7 +16,7 @@ import docx
 import base64
 
 from models.interview_state import InterviewState
-from services import interview_service, evaluation_service, jd_service, resume_service, openai_client
+from services import interview_service, evaluation_service, jd_service, resume_service, gemini_client
 from services.report_service import generate_report
 from services.resume_service import parse_resume
 from services.jd_service import analyze_jd
@@ -141,7 +141,7 @@ async def upload_resume(
         tts_duration = 0.0
         if question:
             try:
-                speech_bytes, tts_duration = await openai_client.generate_speech(question)
+                speech_bytes, tts_duration = await gemini_client.generate_speech(question)
                 if speech_bytes:
                     audio_base64 = base64.b64encode(speech_bytes).decode('utf-8')
             except Exception as e:
@@ -175,8 +175,8 @@ async def transcribe_audio(
     """
     Step 3.1: Transcribe Candidate Audio.
     
-    Receives an audio blob from the frontend and uses OpenAI's Whisper model
-    through the `openai_client` to accurately transcribe it to text.
+    Receives an audio blob from the frontend and uses Gemini's audio understanding
+    through the `gemini_client` to accurately transcribe it to text.
     
     Returns:
         JSON response with the transcribed text.
@@ -186,7 +186,7 @@ async def transcribe_audio(
     
     try:
         audio_content = await audio.read()
-        answer_text, stt_duration = await openai_client.transcribe_audio(audio_content, audio.filename)
+        answer_text, stt_duration = await gemini_client.transcribe_audio(audio_content, audio.filename)
     except Exception as e:
         import traceback
         traceback.print_exc()
@@ -250,7 +250,7 @@ async def submit_answer(
     tts_duration = 0.0
     if next_question:
         try:
-            speech_bytes, tts_duration = await openai_client.generate_speech(next_question)
+            speech_bytes, tts_duration = await gemini_client.generate_speech(next_question)
             if speech_bytes:
                 audio_base64 = base64.b64encode(speech_bytes).decode('utf-8')
         except Exception as e:

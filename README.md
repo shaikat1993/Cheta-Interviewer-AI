@@ -45,7 +45,7 @@ Cheta-Interviewer-AI/
 │   ├── models/
 │   │   └── interview_state.py   # Session state class
 │   ├── services/
-│   │   ├── openai_client.py     # Gemini LLM, STT, TTS wrappers
+│   │   ├── gemini_client.py     # Gemini LLM, STT, TTS wrappers
 │   │   ├── jd_service.py        # Job description analysis
 │   │   ├── resume_service.py    # Resume parsing
 │   │   ├── interview_service.py # Question generation

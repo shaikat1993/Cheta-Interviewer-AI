@@ -3,11 +3,11 @@ services/interview_service.py
 
 Handles the core logic for dynamically generating AI interview questions based
 on the candidate's resume, the job description, and the ongoing conversational context.
-It connects to OpenAI through `openai_client` to produce context-aware responses.
+It connects to Gemini through `gemini_client` to produce context-aware responses.
 """
 import json
 import difflib
-from services.openai_client import call_llm
+from services.gemini_client import call_llm
 from config import TEMPERATURE_MEDIUM
 from services.termination_service import should_terminate_interview
 

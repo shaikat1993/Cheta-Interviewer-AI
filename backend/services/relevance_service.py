@@ -1,4 +1,4 @@
-from services.openai_client import call_llm
+from services.gemini_client import call_llm
 from config import TEMPERATURE_LOW
 import json
 

@@ -14,7 +14,7 @@ Scores are 0–10 for each rubric and converted to an overall rating out of 100.
 """
 
 import json
-from services.openai_client import call_llm
+from services.gemini_client import call_llm
 
 
 async def evaluate_answer(state):

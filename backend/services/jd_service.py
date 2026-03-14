@@ -6,7 +6,7 @@ like role title and required skills needed to drive the interview flow.
 """
 import json
 from fastapi import HTTPException
-from services.openai_client import call_llm
+from services.gemini_client import call_llm
 from config import TEMPERATURE_LOW
 
 
