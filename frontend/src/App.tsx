@@ -2,7 +2,7 @@
  * App.tsx
  * 
  * Root component that sets up the React Router and defines the navigation
- * paths for the entire AI Mock Interview application.
+ * paths for the entire Cheta Interviewer AI application.
  */
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Landing from './pages/Landing';

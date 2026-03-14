@@ -1,6 +1,6 @@
 # Cheta Interviewer AI
 
-A full-stack AI-powered mock interview platform that generates personalized technical interview questions from your resume and job description, evaluates your spoken answers in real time, and delivers a comprehensive performance report.
+> An AI-powered mock interview platform that reads your resume, understands the job you're applying for, asks you real interview questions out loud, listens to your answers, and gives you a detailed performance report — all powered by Google Gemini.
 
 ---
 
@@ -38,26 +38,27 @@ A full-stack AI-powered mock interview platform that generates personalized tech
 ## Project Structure
 
 ```
-AI-Mock-Interview-System/
+Cheta-Interviewer-AI/
 ├── backend/
-│   ├── app.py                  # FastAPI entry point & all endpoints
-│   ├── config.py               # Environment config & model settings
+│   ├── app.py                   # FastAPI entry point & all endpoints
+│   ├── config.py                # Environment config & model settings
 │   ├── models/
-│   │   └── interview_state.py  # Session state class
+│   │   └── interview_state.py   # Session state class
 │   ├── services/
-│   │   ├── openai_client.py    # Gemini LLM, STT, TTS wrappers
-│   │   ├── jd_service.py       # Job description analysis
-│   │   ├── resume_service.py   # Resume parsing
-│   │   ├── interview_service.py# Question generation
+│   │   ├── openai_client.py     # Gemini LLM, STT, TTS wrappers
+│   │   ├── jd_service.py        # Job description analysis
+│   │   ├── resume_service.py    # Resume parsing
+│   │   ├── interview_service.py # Question generation
 │   │   ├── evaluation_service.py# Answer scoring
-│   │   └── report_service.py   # Final report compilation
+│   │   └── report_service.py    # Final report compilation
 │   └── utils/
-│       └── document_parser.py  # PDF/DOCX text extraction
-└── frontend/
-    └── src/
-        ├── pages/              # Landing, JD, Upload, Interview, Report
-        ├── components/         # QuestionCard, AudioRecorder, ScorePanel
-        └── services/api.ts     # Typed API client
+│       └── document_parser.py   # PDF/DOCX text extraction
+├── frontend/
+│   └── src/
+│       ├── pages/               # Landing, JD, Upload, Interview, Report
+│       ├── components/          # QuestionCard, AudioRecorder, ScorePanel
+│       └── services/api.ts      # Typed API client
+└── start.sh                     # One-command launcher for both servers
 ```
 
 ---
@@ -68,48 +69,146 @@ AI-Mock-Interview-System/
 
 - Python 3.9+
 - Node.js 16+
-- Google Gemini API key — get one free at [aistudio.google.com](https://aistudio.google.com)
+- A **personal** Google account (Workspace/company accounts have Gemini API quota blocked)
 
-### Backend
+---
+
+## Step 1 — Get Your Free Gemini API Key
+
+The entire AI backbone of this project runs on Google Gemini, and the API is **completely free** to get started.
+
+```
+1. Go to → https://aistudio.google.com/app/apikey
+2. Sign in with your personal Gmail account
+3. Click "Create API key"
+4. Copy the key — it looks like: AIzaSy...
+```
+
+> **Important:** Use a personal Gmail, not a Google Workspace (company/school) account.
+> Workspace accounts have Gemini API quota restricted to zero on the free tier.
+
+Once you have the key, create the environment file:
 
 ```bash
+# Inside the backend/ folder
+touch backend/.env
+```
+
+Open `backend/.env` and add:
+
+```
+GEMINI_API_KEY=your_api_key_here
+```
+
+---
+
+## Step 2 — Set Up the Python Virtual Environment
+
+A virtual environment keeps the project's dependencies isolated from your system Python. **Always do this before running the backend.**
+
+```bash
+# Navigate into the backend folder
 cd backend
+
+# Create the virtual environment (only needed once)
+python3 -m venv venv
+```
+
+You'll see a new `venv/` folder appear. Now activate it:
+
+```bash
+# macOS / Linux
+source venv/bin/activate
+
+# Windows
+venv\Scripts\activate
+```
+
+Your terminal prompt will change to show `(venv)` — that means it's active.
+
+```bash
+# Install all backend dependencies
+pip install -r requirements.txt
+```
+
+This installs FastAPI, Uvicorn, Google Gemini SDK, gTTS, and everything else the backend needs.
+
+> To deactivate the venv later, just run: `deactivate`
+
+---
+
+## Step 3 — Run the Project
+
+Go back to the project root and use the one-command launcher:
+
+```bash
+cd ..   # back to project root (where start.sh lives)
+bash start.sh
+```
+
+That's it. The script will:
+
+```
+[backend]  Activate venv → install deps → start FastAPI on http://127.0.0.1:8000
+[frontend] Install npm packages (if needed) → start Vite on http://localhost:5173
+```
+
+Open your browser and go to:
+
+```
+http://localhost:5173
+```
+
+Press `Ctrl+C` in the terminal to stop both servers.
+
+---
+
+## Troubleshooting
+
+**Port already in use?**
+```bash
+lsof -ti:8000 | xargs kill -9
+lsof -ti:5173 | xargs kill -9
+```
+Then run `bash start.sh` again.
+
+**Broken venv (old path errors)?**
+```bash
+cd backend
+rm -rf venv
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Create `backend/.env`:
-```
-GEMINI_API_KEY=your_api_key_here
-```
-
-Start the server:
+**`ImportError: cannot import name 'genai' from 'google'`?**
+Your venv is not activated or `google-genai` wasn't installed. Run:
 ```bash
-python -m uvicorn app:app --reload
+source backend/venv/bin/activate
+pip install -r backend/requirements.txt
 ```
-
-### Frontend
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Open `http://localhost:5173` in your browser.
 
 ---
 
 ## How It Works
 
-1. **Job Description** — Paste the JD; backend extracts role and required skills
-2. **Resume Upload** — Upload PDF/DOCX; AI builds your candidate profile
-3. **Interview** — Up to 12 adaptive questions, one skill at a time
-   - Question is spoken aloud via TTS
-   - Record your answer or type it
-   - AI transcribes, evaluates, and generates the next question
-4. **Report** — View overall score, per-skill radar chart, and export as PDF
+```
+You                    Cheta AI
+ │                         │
+ ├─ Paste Job Description ─► Extracts role + required skills
+ │                         │
+ ├─ Upload Resume (PDF/DOCX)► Builds your candidate profile
+ │                         │
+ ├─ Hear question (TTS) ◄──┤ Generates first tailored question
+ │                         │
+ ├─ Record your answer ────► Gemini transcribes audio → text
+ │                         │
+ │                    ◄────┤ Scores: Accuracy / Depth / Clarity / Confidence
+ │                         │
+ ├─ Repeat up to 12 rounds ┤
+ │                         │
+ └─ View full report ◄─────┤ Radar chart + bar chart + PDF export
+```
 
 ---
 
@@ -121,6 +220,12 @@ Open `http://localhost:5173` in your browser.
 
 ---
 
+## License
+
+This project is licensed under the [MIT License](LICENSE) — free to use, modify, and distribute.
+
+---
+
 ## Author
 
-**Shaikat**
+**Shaikat** — AI Engineer & Enthusiast

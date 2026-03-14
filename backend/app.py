@@ -1,7 +1,7 @@
 """
 app.py
 
-Main entry point for the FastAPI backend of the AI Mock Interview System.
+Main entry point for the FastAPI backend of Cheta Interviewer AI.
 Provides REST API endpoints for uploading resumes, parsing job descriptions,
 managing interview sessions, transcribing audio, evaluating answers, and
 generating the final performance report.
