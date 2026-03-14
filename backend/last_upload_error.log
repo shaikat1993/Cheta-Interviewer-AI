@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "D:\AI-NavigateLabs\AI Mock Interview System( Capstone project 3)\AI-Mock-Interview-System\backend\app.py", line 131, in upload_resume
+    resume_profile = await resume_service.analyze_resume(resume_text)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\AI-NavigateLabs\AI Mock Interview System( Capstone project 3)\AI-Mock-Interview-System\backend\services\resume_service.py", line 13, in analyze_resume
+    return await parse_resume(resume_text)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\AI-NavigateLabs\AI Mock Interview System( Capstone project 3)\AI-Mock-Interview-System\backend\services\resume_service.py", line 73, in parse_resume
+    structured_data = json.loads(cleaned)
+                      ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Prashanna S R\AppData\Local\Programs\Python\Python312\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Prashanna S R\AppData\Local\Programs\Python\Python312\Lib\json\decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Prashanna S R\AppData\Local\Programs\Python\Python312\Lib\json\decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
